@@ -15,6 +15,12 @@ set cpo&vim
 
 function! s:Qlist(command, selection, start_at_cursor, force, ...)
     " Derive the commands used below from the first argument.
+
+    let ignorecase = &ignorecase
+    if exists("g:qlist_ignorecase") && g:qlist_ignorecase == 1
+        let &ignorecase = 0
+    endif
+
     if a:force == 1
         let excmd = a:command . "list!"
     else
@@ -45,6 +51,8 @@ function! s:Qlist(command, selection, start_at_cursor, force, ...)
         redir END
         let feedback = (a:start_at_cursor ? ']' : '[') . normcmd
     endif
+
+    let &ignorecase = ignorecase
 
     " Clean up the output.
     let lines = split(output, '\n')
